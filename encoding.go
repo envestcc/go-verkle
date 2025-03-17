@@ -71,7 +71,7 @@ var errSerializedPayloadTooShort = errors.New("verkle payload is too short")
 // The serialized bytes have the format:
 // - Internal nodes: <nodeType><bitlist><commitment>
 // - Leaf nodes:     <nodeType><stem><bitlist><comm><c1comm><c2comm><children...>
-func ParseNode(serializedNode []byte, depth byte) (VerkleNode, error) {
+func ParseNode(serializedNode []byte, depth byte, _ ...[]byte) (VerkleNode, error) {
 	// Check that the length of the serialized node is at least the smallest possible serialized node.
 	if len(serializedNode) < nodeTypeSize+banderwagon.UncompressedSize {
 		return nil, errSerializedPayloadTooShort
