@@ -74,3 +74,7 @@ func (UnknownNode) setDepth(_ byte) {
 func (UnknownNode) Hash() *Fr {
 	return &FrZero
 }
+
+func (UnknownNode) InsertOrdered(any, any, any) error {
+	panic("implement me")
+}

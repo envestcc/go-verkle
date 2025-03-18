@@ -62,6 +62,10 @@ func (HashedNode) GetProofItems(keylist, NodeResolverFn) (*ProofElements, []byte
 	return nil, nil, nil, errors.New("can not get the full path, and there is no proof of absence")
 }
 
+func (HashedNode) InsertOrdered(any, any, any) error {
+	panic("implement me")
+}
+
 func (HashedNode) Serialize() ([]byte, error) {
 	return nil, errSerializeHashedNode
 }

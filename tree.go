@@ -88,6 +88,8 @@ type VerkleNode interface {
 	// Copy a node and its children
 	Copy() VerkleNode
 
+	InsertOrdered(any, any, any) error
+
 	// toDot returns a string representing this subtree in DOT language
 	toDot(string, string) string
 
@@ -602,7 +604,7 @@ func (n *InternalNode) Delete(key []byte, resolver NodeResolverFn) (bool, error)
 
 // Flush hashes the children of an internal node and replaces them
 // with HashedNode. It also sends the current node on the flush channel.
-func (n *InternalNode) Flush(flush NodeFlushFn) {
+func (n *InternalNode) Flush(flush any) {
 	//
 	var (
 		path                []byte
@@ -613,7 +615,7 @@ func (n *InternalNode) Flush(flush NodeFlushFn) {
 			if len(path) == 0 {
 				path = p[:n.depth]
 			}
-			flush(p, vn)
+			flush.(NodeFlushFn)(p, vn)
 		}
 	)
 
@@ -629,7 +631,7 @@ func (n *InternalNode) Flush(flush NodeFlushFn) {
 			n.children[i] = HashedNode{}
 		}
 	}
-	flush(path, n)
+	flush.(NodeFlushFn)(path, n)
 }
 
 // FlushAtDepth goes over all internal nodes of a given depth, and
@@ -833,6 +835,10 @@ func groupKeys(keys keylist, depth byte) []keylist {
 	groups = append(groups, keys[firstkey:lastkey])
 
 	return groups
+}
+
+func (*InternalNode) InsertOrdered(any, any, any) error {
+	panic("implement me")
 }
 
 func (n *InternalNode) GetProofItems(keys keylist, resolver NodeResolverFn) (*ProofElements, []byte, [][]byte, error) {
@@ -1378,6 +1384,10 @@ func leafToComms(poly []Fr, val []byte) error {
 		}
 	}
 	return nil
+}
+
+func (*LeafNode) InsertOrdered(any, any, any) error {
+	panic("implement me")
 }
 
 func (n *LeafNode) GetProofItems(keys keylist, _ NodeResolverFn) (*ProofElements, []byte, [][]byte, error) { // skipcq: GO-R1005

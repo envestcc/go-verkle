@@ -57,6 +57,10 @@ func (Empty) GetProofItems(keylist, NodeResolverFn) (*ProofElements, []byte, [][
 	return nil, nil, nil, errors.New("trying to produce a commitment for an empty subtree")
 }
 
+func (Empty) InsertOrdered(any, any, any) error {
+	panic("implement me")
+}
+
 func (Empty) Serialize() ([]byte, error) {
 	return nil, errors.New("can't encode empty node to RLP")
 }
